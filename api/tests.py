@@ -18,7 +18,7 @@ class AppListViewTestCase(TestCase):
     def test_create_app(self):
 
         url = reverse('api:apps')
-        request_data = {'ID': 'TEST_ID', 'name': 'test_app'}
+        request_data = {'ID': 1234, 'name': 'test_app'}
 
         response = self.client.post(url, data=json.dumps(request_data), content_type="application/json",
                                     HTTP_AUTHORIZATION="Token {}".format(self.test_user.auth_token.key))
@@ -32,10 +32,10 @@ class AppViewTestCase(TestCase):
 
         Token.objects.create(user=self.test_user)
 
-        self.test_app = Application.objects.create(ID='id_test', name='new_app')
+        self.test_app = Application.objects.create(ID=1234, name='new_app')
 
     def test_retrieve_app(self):
-        url = reverse('api:app', kwargs={'pk':self.test_app.id})
+        url = reverse('api:app', kwargs={'pk': self.test_app.id})
 
         response = self.client.get(url, HTTP_AUTHORIZATION="Token {}".format(self.test_user.auth_token.key))
 
@@ -64,7 +64,7 @@ class AppInfoViewTestCase(TestCase):
 
         Token.objects.create(user=self.test_user)
 
-        self.test_app = Application.objects.create(ID='id_test', name='new_app')
+        self.test_app = Application.objects.create(ID=1234, name='new_app')
         self.test_app.create_api_key()
 
     def test_info_app(self):
@@ -73,17 +73,6 @@ class AppInfoViewTestCase(TestCase):
         response = self.client.get(url, HTTP_AUTHORIZATION="Token {}".format(self.test_user.auth_token.key))
 
         assert response.status_code == 200
-
-
-class CreateUserTestCase(TestCase):
-    def test_create_user(self):
-        url = reverse('api:create_user')
-
-        request_data = {'username': 'new_user', 'password': 'new_password'}
-
-        response = self.client.post(url, data=json.dumps(request_data), content_type="application/json")
-
-        assert response.status_code == 201
 
 
 class GetUserTokenView(TestCase):

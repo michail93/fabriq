@@ -3,6 +3,13 @@ from rest_framework import serializers
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
+
+    def validate_ID(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("ID must be greater than 0")
+        else:
+            return value
+
     class Meta:
         model = Application
         exclude = ['api_key']
@@ -14,10 +21,6 @@ class ApplicationInfoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CreateUserSerializer(serializers.Serializer):
+class GetUserTokenSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=100)
     password = serializers.CharField(max_length=100)
-
-
-class GetUserTokenSerializer(CreateUserSerializer):
-    pass
